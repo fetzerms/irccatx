@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<irccatx>
+    <ircclient>
+        <server>
+            <host>irc.freenode.net</host>
+            <port>7000</port>
+            <ssl>true</ssl>
+            <password/>
+            <messageDelay>250</messageDelay>
+        </server>
+        <client>
+            <nick>irccatX</nick>
+        </client>
+    </ircclient>
+
+    <channels>
+        <channel>
+            <name>pircbotx123</name>
+        </channel>
+        <channel>
+            <name>#pircbotx12</name>
+            <password>tes1t</password>
+        </channel>
+    </channels>
+
+    <catserver>
+        <server>
+            <host>127.0.0.1</host>
+            <port>12345</port>
+        </server>
+    </catserver>
+
+    <scripts>
+        <script>
+            <trigger>!</trigger>
+            <handler>scripts/bang_script.sh</handler>
+        </script>
+        <script>
+            <trigger>.</trigger>
+            <handler>scripts/dot_script.sh</handler>
+        </script>
+    </scripts>
+</irccatx>
