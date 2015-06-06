@@ -1,13 +1,13 @@
 IRCCatX
 =======
 
-This software is inspired by the original IRCCat by Richard Jones (https://github.com/RJ/irccat), which is not actively<br>
+This software is inspired by the original IRCCat by Richard Jones (https://github.com/RJ/irccat), which is not actively
 maintained anymore. It is meant to be a replacement for the original IRCCat.
 
 Why IRCCatX?
 ------------
-The original IRCCat lacked the support for SSL encrypted connections, as the underlying version of pircbot does not<br>
-support SSL connections aswell. There is a fork of the original pircbot, called PircBotX which provides SSL support.<br>
+The original IRCCat lacked the support for SSL encrypted connections, as the underlying version of pircbot does not
+support SSL connections aswell. There is a fork of the original pircbot, called PircBotX which provides SSL support.
 Hence IRCCatX was born.
 
 Installation
@@ -70,7 +70,7 @@ To send text to a specific channel, prefix the message with @*:
 
 $ echo "@* this will be sent to all users." | netcat -q0 127.0.0.1 12345
 
-Use this with caution. You can easily get kicked/banned on major IRC Networks for spamming all users.<br> 
+Use this with caution. You can easily get kicked/banned on major IRC Networks for spamming all users. 
 Only use this, if you are sure that all members in the channel want to receive your messages.
 
 Combination of the above
@@ -104,7 +104,7 @@ Colorizing output
 
 The output to channels and users can be colorized using the following variables:
 
-NORMAL, BOLD, UDNERLINE, REVERSE, WHITE, BLACK, DBLUE, DGREEN, RED, BROWN, PURPLE, ORANGE, YELLOW, GREEN,<br> TEAL, CYAN,
+NORMAL, BOLD, UDNERLINE, REVERSE, WHITE, BLACK, DBLUE, DGREEN, RED, BROWN, PURPLE, ORANGE, YELLOW, GREEN, TEAL, CYAN,
 BLUE, PINK, DGRAY, GRAY. The variables can be prefixed with either "#" or "%". (Adapted from original IrcCat).
 
 echo "#channel1 this will be sent %REDin red%NORMAL to #channel1" | netcat -q0 127.0.0.1 12345
@@ -113,16 +113,16 @@ echo "#channel1 this will be sent %REDin red%NORMAL to #channel1" | netcat -q0 1
 Extending IRCCatX
 =================
 
-IRCCatX can easily be extended to use own Listeners. To achieve this, you have to create a new listener in <br>
-de.fetzerms.irccatx.listeners and make sure to include it in de.fetzerms.irccatx.client.IrcClient. For the actual<br>
-implementation of the Listener, please refer to the GenericLIstener or the ScriptListener, or check the pircbotx<br>
+IRCCatX can easily be extended to use own Listeners. To achieve this, you have to create a new listener in 
+de.fetzerms.irccatx.listeners and make sure to include it in de.fetzerms.irccatx.client.IrcClient. For the actual
+implementation of the Listener, please refer to the GenericLIstener or the ScriptListener, or check the pircbotx
 documentation.
 
 Using scripts with IRCCatX
 ==========================
 
-To have IRCCatX execute scripts on certain triggers, you need to add those to the irccatx configuration file. <br>
-See the supplied examples. The arguments passed to the script are as follows: <br>
+To have IRCCatX execute scripts on certain triggers, you need to add those to the irccatx configuration file. 
+See the supplied examples. The arguments passed to the script are as follows: 
 
 - $1: Triggered command, without the trigger itself
 - $2: Hostmask of the sender
@@ -131,8 +131,8 @@ See the supplied examples. The arguments passed to the script are as follows: <b
 Contributing
 ============
 
-Contributions to IRCCatX are welcome!<br>
+Contributions to IRCCatX are welcome!
 
-If you have any additions, examples or bugfixes ready, feel free to create a pull request on GitHub. The pull requests will be reviewed<br>
-and will be merged as soon as possible.To ease the process of merging the pull requests, please create one pull request<br>
+If you have any additions, examples or bugfixes ready, feel free to create a pull request on GitHub. The pull requests will be reviewed
+and will be merged as soon as possible.To ease the process of merging the pull requests, please create one pull request
  per feature/fix, so those can be selectively included in IRCCatX.
