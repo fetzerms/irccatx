@@ -78,11 +78,11 @@ Combination of the above
 
 All of the above prefixes can be combined, using a comma seperated list as prefix e.g.:
 
-$ echo "#*,@operator this will be sent to all channels and to the user named operator." | netcat -q0 127.0.0.1 12345
+$ echo "#*,@operator sent to all channels and to operator." | netcat -q0 127.0.0.1 12345
 
-$ echo "#channel1,#channel2 this will to both, #channel1 and #channel2" | netcat -q0 127.0.0.1 12345
+$ echo "#channel1,#channel2 send to #channel1 and #channel2" | netcat -q0 127.0.0.1 12345
 
-$ echo "#channel1,@user this will to both, #channel1 to the user named user" | netcat -q0 127.0.0.1 12345
+$ echo "#channel1,@user send to #channel1 and user" | netcat -q0 127.0.0.1 12345
 
 
 Changing to topic of a channel
