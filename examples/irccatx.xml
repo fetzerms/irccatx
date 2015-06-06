@@ -15,13 +15,12 @@
 
     <channels>
         <channel>
-            <name>pircbotx</name>
+            <name>#irccatx</name>
             <default>true</default>
         </channel>
         <channel>
-            <name>#pircbotx-dev</name>
-            <password>tes1t</password>
-            <default>true</default>
+            <name>#irccatx-test</name>
+            <password>testpassword</password>
         </channel>
     </channels>
 
