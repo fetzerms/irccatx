@@ -97,7 +97,7 @@ Changing to topic of several channels
 
 To change the topic of several channels at once, prefix the message with <br>%TOPIC #channel1,#channel2
 
-$ echo "%TOPIC #channel1,#channel2 New topic on #channel1 and #channel2" | netcat -q0 127.0.0.1 12345
+$ echo "%TOPIC #channel1,#channel2 Topic on #channel1 and #channel2" | netcat -q0 127.0.0.1 12345
 
 Colorizing output
 -----------------
