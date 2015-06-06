@@ -14,7 +14,7 @@ Installation
 ============
 Copy and edit the configuration file inside the examples folder.
 
-Build the IRCCatX with: 
+Build IRCCatX with: 
 
 $ mvn package
 
@@ -31,7 +31,7 @@ By default, just like the original IRCCat, IRCCatX listens on 127.0.0.1:12345
 
 Sending messages to IRC works as follows:
 
-$ echo "<message>" | netcat -q0 127.0.0.1 12345
+$ echo "message" | netcat -q0 127.0.0.1 12345
 
 The message can be prefixed to send to specific (or a set of) channels or users.
 
