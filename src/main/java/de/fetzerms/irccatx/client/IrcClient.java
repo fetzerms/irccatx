@@ -14,7 +14,6 @@ import java.util.Map;
 /**
  * Copyright 2015 - Matthias Fetzer <br>
  * <p/>
- * Classdescription here...
  *
  * @author Matthias Fetzer - matthias [at] fetzerms.de
  */
@@ -47,27 +46,25 @@ public class IrcClient {
         long messageDelay = Config.getClientMessageDelay();
 
 
+        // Create configuration
         @SuppressWarnings("unchecked") Configuration.Builder configBuilder = new Configuration.Builder()
                 .setName(nick)
                 .setServerHostname(host)
                 .setServerPort(port)
                 .addListener(new GenericListener()) // Generic Listener
                 .addListener(new ScriptListener())  // Script Listener
-                .setServerPassword(password)
-                .setMessageDelay(messageDelay);
+                .setServerPassword(password).setMessageDelay(messageDelay);
 
+        // Add all channels
         for (Map.Entry<String, String> channelEntry : Config.getClientChannels().entrySet()) {
 
             String channelName = channelEntry.getKey();
             String channelPassword = channelEntry.getValue();
 
-            if (!channelName.startsWith("#")) {
-                channelName = "#" + channelName;
-            }
-
             configBuilder.addAutoJoinChannel(channelName, channelPassword);
         }
 
+        // Set SSLSocket, if ssl is enabled.
         if (ssl) {
             configBuilder.setSocketFactory(new UtilSSLSocketFactory());
         }

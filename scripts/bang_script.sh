@@ -1,6 +1,7 @@
 #!/bin/bash
 command=$1
-args=$2
+hostmask=$2
+args=$3
 
 if [ "$command" == "df" ]; then
     df $args

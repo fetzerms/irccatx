@@ -5,6 +5,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Map;
  */
 public class Config {
 
+    public static String VERSION = "0.1b";
     private static XMLConfiguration config = null;
 
     /**
@@ -51,16 +53,31 @@ public class Config {
         return config.getString("ircclient.server.password", "");
     }
 
+    /**
+     * Retrieves a map of all channels and their password in the configuration.
+     * If no password is set, the password is an empty string.
+     *
+     * @return Map, mapping channels to passwords
+     */
     public static Map<String, String> getClientChannels() {
         HashMap<String, String> channelPasswordMap = new HashMap<>();
         List<HierarchicalConfiguration> channelList = config.configurationsAt("channels.channel");
         for (HierarchicalConfiguration channel : channelList) {
-            channelPasswordMap.put(channel.getString("name"), channel.getString("password", ""));
+            String channelName = channel.getString("name");
+            if (!channelName.startsWith("#")) {
+                channelName = "#" + channelName;
+            }
+            channelPasswordMap.put(channelName, channel.getString("password", ""));
         }
 
         return channelPasswordMap;
     }
 
+    /**
+     * Retrieves all triggers and the related scripts.
+     *
+     * @return Map <trigger, script>
+     */
     public static HashMap<String, String> getScripts() {
         HashMap<String, String> scriptMap = new HashMap<>();
         List<HierarchicalConfiguration> scriptList = config.configurationsAt("scripts.script");
@@ -69,6 +86,26 @@ public class Config {
         }
 
         return scriptMap;
+    }
+
+    /**
+     * Retrieves a list of all default channels.
+     *
+     * @return List containing all default channels
+     */
+    public static List<String> getDefaultChannels() {
+        ArrayList<String> defaultChannelList = new ArrayList<>();
+        List<HierarchicalConfiguration> channelList = config.configurationsAt("channels.channel");
+        for (HierarchicalConfiguration channel : channelList) {
+            if (channel.getBoolean("default", false)) {
+                String channelName = channel.getString("name");
+                if (!channelName.startsWith("#")) {
+                    channelName = "#" + channelName;
+                }
+                defaultChannelList.add(channelName);
+            }
+        }
+        return defaultChannelList;
     }
 
     public static long getClientMessageDelay() {

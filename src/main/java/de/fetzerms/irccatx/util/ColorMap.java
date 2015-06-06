@@ -15,7 +15,7 @@ import java.util.Map;
 public class ColorMap {
 
     /**
-     * Adapted from original IRCCat
+     * Taken from fm.last.irccat
      */
     public static String colorize(String m) {
         Map<String, String> colorReplacementMap = new HashMap<>();

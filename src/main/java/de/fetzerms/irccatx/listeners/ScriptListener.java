@@ -12,7 +12,9 @@ import java.util.HashMap;
 /**
  * Copyright 2015 - Matthias Fetzer <br>
  * <p/>
- * Classdescription here...
+ *
+ * Script listener. This class will listen on Messages and PrivateMessages and
+ * start the execution of scripts that are associated with triggers.
  *
  * @author Matthias Fetzer - matthias [at] fetzerms.de
  */
@@ -25,12 +27,13 @@ public class ScriptListener extends ListenerAdapter {
         if (script != null) {
             String target = event.getChannel().getName();
             String command = event.getMessage().split(" ", 2)[0].substring(1); // command without prefix
+            String hostmask = event.getUser().getHostmask();
 
             String args = null;
             if (event.getMessage().split(" ", 2).length > 1) {
                 args = event.getMessage().split(" ", 2)[1];
             }
-            new Thread(new ScriptRunner(script, target, command, args)).run();
+            new Thread(new ScriptRunner(script, target, hostmask, command, args)).run();
         }
 
     }
@@ -42,12 +45,13 @@ public class ScriptListener extends ListenerAdapter {
         if (script != null) {
             String target = event.getUser().getNick();
             String command = event.getMessage().split(" ", 2)[0].substring(1); // command without prefix
+            String hostmask = event.getUser().getHostmask();
 
             String args = null;
             if (event.getMessage().split(" ", 2).length > 1) {
                 args = event.getMessage().split(" ", 2)[1];
             }
-            new Thread(new ScriptRunner(script, target, command, args)).run();
+            new Thread(new ScriptRunner(script, target, hostmask, command, args)).run();
         }
 
     }

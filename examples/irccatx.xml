@@ -15,11 +15,13 @@
 
     <channels>
         <channel>
-            <name>pircbotx123</name>
+            <name>pircbotx</name>
+            <default>true</default>
         </channel>
         <channel>
-            <name>#pircbotx12</name>
+            <name>#pircbotx-dev</name>
             <password>tes1t</password>
+            <default>true</default>
         </channel>
     </channels>
 
@@ -40,4 +42,5 @@
             <handler>scripts/dot_script.sh</handler>
         </script>
     </scripts>
+
 </irccatx>
