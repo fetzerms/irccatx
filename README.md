@@ -133,6 +133,6 @@ Contributing
 
 Contributions to IRCCatX are welcome!<br>
 
-If you have any additions or bugfixes, feel free to create a pull request on GitHub. The pull requests will be reviewed<br>
+If you have any additions, examples or bugfixes ready, feel free to create a pull request on GitHub. The pull requests will be reviewed<br>
 and will be merged as soon as possible.To ease the process of merging the pull requests, please create one pull request<br>
  per feature/fix, so those can be selectively included in IRCCatX.

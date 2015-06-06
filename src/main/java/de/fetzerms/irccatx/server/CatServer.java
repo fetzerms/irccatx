@@ -1,5 +1,7 @@
 package de.fetzerms.irccatx.server;
 
+import de.fetzerms.irccatx.util.Config;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -18,7 +20,7 @@ public class CatServer implements Runnable {
 
         ServerSocket serverSocket = null;
         try {
-            serverSocket = new ServerSocket(12345, 0, InetAddress.getByName("localhost"));
+            serverSocket = new ServerSocket(Config.getCatPort(), 0, InetAddress.getByName(Config.getCatHost()));
         } catch (IOException e) {
             e.printStackTrace();
         }

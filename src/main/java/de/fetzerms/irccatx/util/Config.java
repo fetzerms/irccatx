@@ -111,4 +111,12 @@ public class Config {
     public static long getClientMessageDelay() {
         return config.getLong("ircclient.server.messagedelay", 250L);
     }
+
+    public static String getCatHost() {
+        return config.getString("catserver.server.host", "127.0.0.1");
+    }
+
+    public static int getCatPort() {
+        return config.getInt("catserver.server.port", 12345);
+    }
 }
