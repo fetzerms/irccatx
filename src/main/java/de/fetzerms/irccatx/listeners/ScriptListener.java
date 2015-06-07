@@ -6,6 +6,8 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
@@ -20,6 +22,11 @@ import java.util.HashMap;
  */
 public class ScriptListener extends ListenerAdapter {
 
+    // Hacky way to get current class for logger.
+    private static Class thisClass = new Object() {
+    }.getClass().getEnclosingClass();
+    private static Logger LOG = LoggerFactory.getLogger(thisClass);
+
     @Override
     public void onMessage(MessageEvent event) {
 
@@ -33,6 +40,8 @@ public class ScriptListener extends ListenerAdapter {
             if (event.getMessage().split(" ", 2).length > 1) {
                 args = event.getMessage().split(" ", 2)[1];
             }
+
+            LOG.info("Executing script {}", script);
             new Thread(new ScriptRunner(script, target, hostmask, command, args)).run();
         }
 
@@ -67,9 +76,14 @@ public class ScriptListener extends ListenerAdapter {
 
         char key = event.getMessage().charAt(0);
 
+        LOG.info("Retrieving script for trigger: {}", key);
         if (hasScript(key)) {
-            return Config.getScripts().get(Character.toString(key));
+
+            String script = Config.getScripts().get(Character.toString(key));
+            LOG.info("Found script for trigger {}: {}", key, script);
+            return script;
         } else {
+            LOG.debug("No script found for trigger {}", key);
             return null;
         }
 

@@ -1,6 +1,8 @@
 package de.fetzerms.irccatx.util;
 
 import de.fetzerms.irccatx.client.IrcClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +18,11 @@ import java.io.InputStreamReader;
  * @author Matthias Fetzer - matthias [at] fetzerms.de
  */
 public class ScriptRunner implements Runnable {
+
+    // Hacky way to get current class for logger.
+    private static Class thisClass = new Object() {
+    }.getClass().getEnclosingClass();
+    private static Logger LOG = LoggerFactory.getLogger(thisClass);
 
 
     private final String script;

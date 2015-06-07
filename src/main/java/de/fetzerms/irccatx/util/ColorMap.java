@@ -1,6 +1,8 @@
 package de.fetzerms.irccatx.util;
 
 import org.pircbotx.Colors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,10 +16,18 @@ import java.util.Map;
  */
 public class ColorMap {
 
+    // Hacky way to get current class for logger.
+    private static Class thisClass = new Object() {
+    }.getClass().getEnclosingClass();
+    private static Logger LOG = LoggerFactory.getLogger(thisClass);
+
     /**
      * Taken from fm.last.irccat
      */
     public static String colorize(String m) {
+
+        LOG.debug("Replacing colors for message \"{}\"", m);
+
         Map<String, String> colorReplacementMap = new HashMap<>();
         colorReplacementMap.put("NORMAL", Colors.NORMAL);
         colorReplacementMap.put("BOLD", Colors.BOLD);

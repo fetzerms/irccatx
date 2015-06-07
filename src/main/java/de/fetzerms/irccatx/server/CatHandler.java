@@ -6,6 +6,8 @@ import de.fetzerms.irccatx.util.ColorMap;
 import de.fetzerms.irccatx.util.Config;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,6 +25,10 @@ import java.util.List;
  */
 public class CatHandler implements Runnable {
 
+    // Hacky way to get current class for logger.
+    private static Class thisClass = new Object() {
+    }.getClass().getEnclosingClass();
+    private static Logger LOG = LoggerFactory.getLogger(thisClass);
     private Socket clientSocket;
 
     public CatHandler(Socket clientSocket) {
@@ -30,6 +36,8 @@ public class CatHandler implements Runnable {
     }
 
     public void run() {
+
+        LOG.debug("CatHandler started.");
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), "UTF-8"));
             String readLine;
@@ -48,6 +56,8 @@ public class CatHandler implements Runnable {
 
                 if (targetString.equals("%TOPIC")) { // Special treatment for %TOPIC
 
+                    LOG.info("Topic command received. ");
+
                     String channels = message.split(" ", 2)[0];
                     String topic = message.split(" ", 2)[1];
 
@@ -57,11 +67,13 @@ public class CatHandler implements Runnable {
                         if (channel.equals("#*")) { // Set topic for all channels
                             ImmutableSortedSet<Channel> channelList = IrcClient.getInstance().getBot().getUserChannelDao().getAllChannels();
                             for (Channel currentChannel : channelList) {
+                                LOG.info("Setting topic for {} to \"{}\"", currentChannel.getName(), topic);
                                 currentChannel.send().setTopic(topic);
                             }
 
                         } else { // Set topic for single channel
                             IrcClient.getInstance().getBot().getUserChannelDao().getChannel(channel).send().setTopic(topic);
+                            LOG.info("Setting topic for {} to \"{}\"", channel, topic);
                         }
 
                     }

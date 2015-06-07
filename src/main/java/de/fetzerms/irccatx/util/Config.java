@@ -4,6 +4,8 @@ package de.fetzerms.irccatx.util;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +24,11 @@ public class Config {
     public static String VERSION = "0.1b";
     private static XMLConfiguration config = null;
 
+    // Hacky way to get current class for logger.
+    private static Class thisClass = new Object() {
+    }.getClass().getEnclosingClass();
+    private static Logger LOG = LoggerFactory.getLogger(thisClass);
+
     /**
      * Initializes the Config with the values from a given XML file
      *
@@ -30,6 +37,7 @@ public class Config {
      * @throws ConfigurationException if malformed XML file
      */
     public static void init(String configFile) throws ConfigurationException {
+        LOG.info("Initializing configuration file.");
         config = new XMLConfiguration(configFile);
     }
 
