@@ -82,21 +82,6 @@ public class Config {
     }
 
     /**
-     * Retrieves all triggers and the related scripts.
-     *
-     * @return Map <trigger, script>
-     */
-    public static HashMap<String, String> getScripts() {
-        HashMap<String, String> scriptMap = new HashMap<>();
-        List<HierarchicalConfiguration> scriptList = config.configurationsAt("scripts.script");
-        for (HierarchicalConfiguration script : scriptList) {
-            scriptMap.put(script.getString("trigger"), script.getString("handler"));
-        }
-
-        return scriptMap;
-    }
-
-    /**
      * Retrieves a list of all default channels.
      *
      * @return List containing all default channels
@@ -114,6 +99,21 @@ public class Config {
             }
         }
         return defaultChannelList;
+    }
+
+    /**
+     * Retrieves all triggers and the related scripts.
+     *
+     * @return Map <trigger, script>
+     */
+    public static HashMap<String, String> getScripts() {
+        HashMap<String, String> scriptMap = new HashMap<>();
+        List<HierarchicalConfiguration> scriptList = config.configurationsAt("scripts.script");
+        for (HierarchicalConfiguration script : scriptList) {
+            scriptMap.put(script.getString("trigger"), script.getString("handler"));
+        }
+
+        return scriptMap;
     }
 
     public static long getClientMessageDelay() {

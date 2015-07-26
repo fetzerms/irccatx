@@ -9,7 +9,9 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Copyright 2015 - Matthias Fetzer <br>
@@ -30,8 +32,8 @@ public class ScriptListener extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) {
 
-        String script = getScript(event);
-        if (script != null) {
+        List<String> scripts = getScripts(event);
+        for(String script : scripts){
             String target = event.getChannel().getName();
             String command = event.getMessage().split(" ", 2)[0].substring(1); // command without prefix
             String hostmask = event.getUser().getHostmask();
@@ -50,8 +52,8 @@ public class ScriptListener extends ListenerAdapter {
     @Override
     public void onPrivateMessage(PrivateMessageEvent event) {
 
-        String script = getScript(event);
-        if (script != null) {
+        List<String> scripts = getScripts(event);
+        for(String script : scripts){
             String target = event.getUser().getNick();
             String command = event.getMessage().split(" ", 2)[0].substring(1); // command without prefix
             String hostmask = event.getUser().getHostmask();
@@ -72,21 +74,20 @@ public class ScriptListener extends ListenerAdapter {
 
     }
 
-    public String getScript(GenericMessageEvent event) {
+    public List<String> getScripts(GenericMessageEvent event) {
 
-        char key = event.getMessage().charAt(0);
+        String message = event.getMessage();
+        ArrayList<String> scripts = new ArrayList<>();
 
-        LOG.info("Retrieving script for trigger: {}", key);
-        if (hasScript(key)) {
-
-            String script = Config.getScripts().get(Character.toString(key));
-            LOG.info("Found script for trigger {}: {}", key, script);
-            return script;
-        } else {
-            LOG.debug("No script found for trigger {}", key);
-            return null;
+        for(String trigger : Config.getScripts().keySet()){
+            if(message.startsWith(trigger)){
+                String script = Config.getScripts().get(trigger);
+                LOG.info("Found script for message with trigger {}: {}", trigger, script);
+                scripts.add(script);
+            }
         }
 
+        return scripts;
     }
 
 

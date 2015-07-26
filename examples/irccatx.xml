@@ -33,7 +33,11 @@
 
     <scripts>
         <script>
-            <trigger>!</trigger>
+            <trigger>!cmdset1</trigger>
+            <handler>scripts/bang_script.sh</handler>
+        </script>
+        <script>
+            <trigger>!cmdset2</trigger>
             <handler>scripts/bang_script.sh</handler>
         </script>
         <script>
