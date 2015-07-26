@@ -1,6 +1,7 @@
 package de.fetzerms.irccatx.util;
 
 
+import de.fetzerms.irccatx.script.Script;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
@@ -106,14 +107,34 @@ public class Config {
      *
      * @return Map <trigger, script>
      */
-    public static HashMap<String, String> getScripts() {
-        HashMap<String, String> scriptMap = new HashMap<>();
-        List<HierarchicalConfiguration> scriptList = config.configurationsAt("scripts.script");
-        for (HierarchicalConfiguration script : scriptList) {
-            scriptMap.put(script.getString("trigger"), script.getString("handler"));
+    public static List<Script> getScripts() {
+
+        ArrayList<Script> scriptList = new ArrayList<>();
+
+        List<HierarchicalConfiguration> scriptConfig = config.configurationsAt("scripts.script");
+        for (HierarchicalConfiguration script : scriptConfig) {
+
+
+            List<String> hostmasks = new ArrayList<>();
+            List<HierarchicalConfiguration> hostmaskConfig = script.configurationsAt("authorization.hostmasks.hostmask");
+            for(HierarchicalConfiguration hostmask : hostmaskConfig){
+                hostmasks.add(hostmask.getString("."));
+            }
+
+            List<String> channels = new ArrayList<>();
+            List<HierarchicalConfiguration> channelsConfig = script.configurationsAt("authorization.channels.channel");
+            for(HierarchicalConfiguration channel : channelsConfig){
+                channels.add(channel.getString("."));
+            }
+
+            Boolean queryAllowed = script.getBoolean("authorization.queryAllowed", true);
+            Boolean channelAllowed = script.getBoolean("authorization.channelAllowed", true);
+
+            scriptList.add(new Script(script.getString("trigger"), script.getString("handler"), hostmasks, channels, queryAllowed, channelAllowed));
+
         }
 
-        return scriptMap;
+        return scriptList;
     }
 
     public static long getClientMessageDelay() {

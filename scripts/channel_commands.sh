@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# These commands should only be triggered from
+# any matching channels.
+#
 command=$1
 hostmask=$2
 args=$3

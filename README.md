@@ -128,6 +128,42 @@ See the supplied examples. The arguments passed to the script are as follows:
 - $2: Hostmask of the sender
 - $3: Any further arguments
 
+Authorization with scripts
+==========================
+
+The execution of scripts can be managed by authorizing users depending on their ident@host, the channel
+the command was executed in or both. Additionally scripts can be restricted to only be run within a query
+or from a channel.
+
+To require authorization for a script, you can add an authorization block to the plugin configuration.
+Please refer to the example config for more examples.
+
+   <authorization>
+    <channelAllowed>false</channelAllowed>
+    <hostmasks>
+     <hostmask>*@gateway/web/freenode/*</hostmask>
+    </hostmasks>
+    <channels>
+     <channel>#irccatx-*</channel>
+    </channels>
+   </authorization>
+   
+The semantics are as follows:
+
+- If one of the options is not set, the option is ignored. E.g.: If no hostmasks are set, everybody is allowed to issue commands.
+
+For channel messages:
+
+- If a channel is set, the user issuing the command needs to issue the command from one of the channels.
+- If a hostmask is set, the user hostmask, issuing the command, needs to match.
+- If both are given, both need to match.
+- If queryOnly is set, the script will not be executed.
+
+For query messages:
+
+- If a hostmask is set, the user hostmask, issuing the command, needs to match.
+- If channelOnly is set, the script will not be executed.
+
 Contributing
 ============
 

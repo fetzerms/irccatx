@@ -33,12 +33,27 @@
 
     <scripts>
         <script>
-            <trigger>!cmdset1</trigger>
-            <handler>scripts/bang_script.sh</handler>
+            <trigger>!admin_</trigger>
+            <handler>scripts/bang_script_authed.sh</handler>
+            <authorization>
+                <channelAllowed>false</channelAllowed>
+                <hostmasks>
+                    <hostmask>*@gateway/web/freenode/*</hostmask>
+                </hostmasks>
+                <channels>
+                    <channel>#irccatx-*</channel>
+                </channels>
+            </authorization>
         </script>
         <script>
-            <trigger>!cmdset2</trigger>
+            <trigger>!channel_</trigger>
             <handler>scripts/bang_script.sh</handler>
+            <authorization>
+                <queryAllowed>false</queryAllowed>
+                <channels>
+                    <channel>#irccatx-*</channel>
+                </channels>
+            </authorization>
         </script>
         <script>
             <trigger>.</trigger>

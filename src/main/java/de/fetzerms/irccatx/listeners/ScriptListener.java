@@ -1,7 +1,8 @@
 package de.fetzerms.irccatx.listeners;
 
+import de.fetzerms.irccatx.script.Script;
 import de.fetzerms.irccatx.util.Config;
-import de.fetzerms.irccatx.util.ScriptRunner;
+import de.fetzerms.irccatx.script.ScriptRunner;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
@@ -32,19 +33,25 @@ public class ScriptListener extends ListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) {
 
-        List<String> scripts = getScripts(event);
-        for(String script : scripts){
-            String target = event.getChannel().getName();
-            String command = event.getMessage().split(" ", 2)[0].substring(1); // command without prefix
-            String hostmask = event.getUser().getHostmask();
+        List<Script> scripts = getScripts(event);
+        for(Script script : scripts){
 
-            String args = null;
-            if (event.getMessage().split(" ", 2).length > 1) {
-                args = event.getMessage().split(" ", 2)[1];
+            String target = event.getChannel().getName();
+            String command = event.getMessage().replace(script.getTrigger(), ""); // command without trigger.
+            String hostmask = event.getUser().getLogin() + "@" + event.getUser().getHostmask();
+
+            if(script.isChannelAllowed() && script.isAuthorizedChannel(target) && script.isAuthorizedHostmask(hostmask)){
+                String args = null;
+                if (event.getMessage().split(" ", 2).length > 1) {
+                    args = event.getMessage().split(" ", 2)[1];
+                }
+
+                LOG.info("Executing script {}", script.getCommand());
+                new Thread(new ScriptRunner(script.getCommand(), target, hostmask, command, args)).run();
+            } else {
+                LOG.info("Not authorized to execute script: {}", script.getCommand());
             }
 
-            LOG.info("Executing script {}", script);
-            new Thread(new ScriptRunner(script, target, hostmask, command, args)).run();
         }
 
     }
@@ -52,42 +59,45 @@ public class ScriptListener extends ListenerAdapter {
     @Override
     public void onPrivateMessage(PrivateMessageEvent event) {
 
-        List<String> scripts = getScripts(event);
-        for(String script : scripts){
+        List<Script> scripts = getScripts(event);
+        for(Script script : scripts){
             String target = event.getUser().getNick();
-            String command = event.getMessage().split(" ", 2)[0].substring(1); // command without prefix
-            String hostmask = event.getUser().getHostmask();
+            String command = event.getMessage().replace(script.getTrigger(), ""); // command without trigger.
+            String hostmask = event.getUser().getLogin() + "@" + event.getUser().getHostmask();
 
-            String args = null;
-            if (event.getMessage().split(" ", 2).length > 1) {
-                args = event.getMessage().split(" ", 2)[1];
+            if(script.isQueryAllowed() && script.isAuthorizedHostmask(hostmask)) {
+                String args = null;
+                if (event.getMessage().split(" ", 2).length > 1) {
+                    args = event.getMessage().split(" ", 2)[1];
+                }
+
+                LOG.info("Executing script {}", script.getCommand());
+                new Thread(new ScriptRunner(script.getCommand(), target, hostmask, command, args)).run();
+            } else {
+                LOG.info("Not authorized to execute script: {}", script.getCommand());
             }
-            new Thread(new ScriptRunner(script, target, hostmask, command, args)).run();
         }
 
     }
 
-    public boolean hasScript(char key) {
-
-        HashMap<String, String> scriptMap = Config.getScripts();
-        return scriptMap.containsKey(Character.toString(key));
-
-    }
-
-    public List<String> getScripts(GenericMessageEvent event) {
+    public List<Script> getScripts(GenericMessageEvent event) {
 
         String message = event.getMessage();
         ArrayList<String> scripts = new ArrayList<>();
 
-        for(String trigger : Config.getScripts().keySet()){
-            if(message.startsWith(trigger)){
-                String script = Config.getScripts().get(trigger);
-                LOG.info("Found script for message with trigger {}: {}", trigger, script);
-                scripts.add(script);
+        List<Script> availableScripts = Config.getScripts();
+        List<Script> matchingScripts = new ArrayList<>();
+
+        for(Script script : availableScripts){
+            if(message.startsWith(script.getTrigger())){
+                String scriptCommand = script.getCommand();
+                LOG.info("Found script for message with trigger {}: {}", script.getTrigger(), script.getCommand());
+
+                matchingScripts.add(script);
             }
         }
 
-        return scripts;
+        return matchingScripts;
     }
 
 

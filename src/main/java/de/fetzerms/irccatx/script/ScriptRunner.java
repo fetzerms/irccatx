@@ -1,4 +1,4 @@
-package de.fetzerms.irccatx.util;
+package de.fetzerms.irccatx.script;
 
 import de.fetzerms.irccatx.client.IrcClient;
 import org.slf4j.Logger;

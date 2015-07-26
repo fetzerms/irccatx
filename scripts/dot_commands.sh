@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# These commands can be triggered from anywhere and anyone.
+#
 command=$1
 hostmask=$2
 args=$3
