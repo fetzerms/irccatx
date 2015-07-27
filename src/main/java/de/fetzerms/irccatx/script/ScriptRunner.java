@@ -1,6 +1,7 @@
 package de.fetzerms.irccatx.script;
 
 import de.fetzerms.irccatx.client.IrcClient;
+import de.fetzerms.irccatx.util.ColorMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +71,7 @@ public class ScriptRunner implements Runnable {
 
             // Print the output to irc
             while ((line = br.readLine()) != null) {
-                IrcClient.getInstance().getBot().sendIRC().message(target, line);
+                IrcClient.getInstance().getBot().sendIRC().message(target, ColorMap.colorize(line));
             }
 
         } catch (IOException e) {

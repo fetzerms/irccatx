@@ -37,7 +37,7 @@ public class ScriptListener extends ListenerAdapter {
         for(Script script : scripts){
 
             String target = event.getChannel().getName();
-            String command = event.getMessage().replace(script.getTrigger(), ""); // command without trigger.
+            String command = event.getMessage().replace(script.getTrigger(), "").split("\\s+")[0]; // command without trigger.
             String hostmask = event.getUser().getLogin() + "@" + event.getUser().getHostmask();
 
             if(script.isChannelAllowed() && script.isAuthorizedChannel(target) && script.isAuthorizedHostmask(hostmask)){
@@ -62,7 +62,7 @@ public class ScriptListener extends ListenerAdapter {
         List<Script> scripts = getScripts(event);
         for(Script script : scripts){
             String target = event.getUser().getNick();
-            String command = event.getMessage().replace(script.getTrigger(), ""); // command without trigger.
+            String command = event.getMessage().replace(script.getTrigger(), "").split("\\s+")[0]; // command without trigger.
             String hostmask = event.getUser().getLogin() + "@" + event.getUser().getHostmask();
 
             if(script.isQueryAllowed() && script.isAuthorizedHostmask(hostmask)) {

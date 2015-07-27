@@ -6,7 +6,7 @@
             <port>7000</port>
             <ssl>true</ssl>
             <password/>
-            <messageDelay>250</messageDelay>
+            <messageDelay>1000</messageDelay>
         </server>
         <client>
             <nick>irccatX</nick>
@@ -57,7 +57,7 @@
         </script>
         <script>
             <trigger>.</trigger>
-            <handler>scripts/dot_script.sh</handler>
+            <handler>scripts/dot_commands.sh</handler>
         </script>
     </scripts>
 

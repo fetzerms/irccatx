@@ -138,7 +138,7 @@ public class Config {
     }
 
     public static long getClientMessageDelay() {
-        return config.getLong("ircclient.server.messagedelay", 250L);
+        return config.getLong("ircclient.server.messageDelay", 250L);
     }
 
     public static String getCatHost() {
