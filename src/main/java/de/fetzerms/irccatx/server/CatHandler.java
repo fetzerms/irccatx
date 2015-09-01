@@ -1,6 +1,7 @@
 package de.fetzerms.irccatx.server;
 
 import com.google.common.collect.ImmutableSortedSet;
+import de.fetzerms.irccatx.blowfish.Blowfish;
 import de.fetzerms.irccatx.client.IrcClient;
 import de.fetzerms.irccatx.util.ColorMap;
 import de.fetzerms.irccatx.util.Config;
@@ -103,26 +104,41 @@ public class CatHandler implements Runnable {
                         if (target.equals("#*")) { // Send to all channels
                             ImmutableSortedSet<Channel> channelList = IrcClient.getInstance().getBot().getUserChannelDao().getAllChannels();
                             for (Channel channel : channelList) {
+                                if (Blowfish.hasKey(channel.getName())) {
+                                    message = Blowfish.encryptMessage(channel.getName(), message);
+                                }
                                 channel.send().message(message);
                             }
 
                         } else if (target.startsWith("#")) { // Send to single channel
+                            if (Blowfish.hasKey(target)) {
+                                message = Blowfish.encryptMessage(target, message);
+                            }
                             IrcClient.getInstance().getBot().getUserChannelDao().getChannel(target).send().message(message);
 
                         } else if (target.equals("@*")) { // Send to all users
                             ImmutableSortedSet<User> userList = IrcClient.getInstance().getBot().getUserChannelDao().getAllUsers();
                             for (User user : userList) {
+                                if (Blowfish.hasKey(user.getNick())) {
+                                    message = Blowfish.encryptMessage(user.getNick(), message);
+                                }
                                 user.send().message(message);
                             }
 
                         } else if (target.startsWith("@")) { // Send to user
                             target = target.substring(1);
+                            if (Blowfish.hasKey(target)) {
+                                message = Blowfish.encryptMessage(target, message);
+                            }
                             IrcClient.getInstance().getBot().getUserChannelDao().getUser(target).send().message(message);
 
                         } else { // No operator given. Send to all default channels.
                             List<String> channels = Config.getDefaultChannels();
                             for (String channel : channels) {
-                                IrcClient.getInstance().getBot().getUserChannelDao().getChannel(channel).send().message(message);
+                                if (Blowfish.hasKey(channel)) {
+                                    readLine = Blowfish.encryptMessage(channel, readLine);
+                                }
+                                IrcClient.getInstance().getBot().getUserChannelDao().getChannel(channel).send().message(readLine);
                             }
                         }
                     }
@@ -133,6 +149,12 @@ public class CatHandler implements Runnable {
 
         {
             e.printStackTrace();
+        } finally {
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }

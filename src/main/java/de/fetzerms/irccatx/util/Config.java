@@ -1,6 +1,7 @@
 package de.fetzerms.irccatx.util;
 
 
+import de.fetzerms.irccatx.blowfish.Blowfish;
 import de.fetzerms.irccatx.script.Script;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
@@ -22,7 +23,7 @@ import java.util.Map;
  */
 public class Config {
 
-    public static String VERSION = "0.1b";
+    public static String VERSION = "0.6";
     private static XMLConfiguration config = null;
 
     // Hacky way to get current class for logger.
@@ -77,6 +78,10 @@ public class Config {
                 channelName = "#" + channelName;
             }
             channelPasswordMap.put(channelName, channel.getString("password", ""));
+            String fishKey = channel.getString("fish.key", "");
+            if(!fishKey.isEmpty()){
+                Blowfish.setKey(channelName, fishKey);
+            }
         }
 
         return channelPasswordMap;
@@ -127,10 +132,12 @@ public class Config {
                 channels.add(channel.getString("."));
             }
 
-            Boolean queryAllowed = script.getBoolean("authorization.queryAllowed", true);
+            Boolean queryAllowed = script.getBoolean("authorization.query.allowed", true);
+            Boolean needsChannel = script.getBoolean("authorization.query.needsChan", true);
             Boolean channelAllowed = script.getBoolean("authorization.channelAllowed", true);
+            Boolean fishOnly = script.getBoolean("authorization.fishOnly", false);
 
-            scriptList.add(new Script(script.getString("trigger"), script.getString("handler"), hostmasks, channels, queryAllowed, channelAllowed));
+            scriptList.add(new Script(script.getString("trigger"), script.getString("handler"), hostmasks, channels, queryAllowed, needsChannel, channelAllowed, fishOnly));
 
         }
 

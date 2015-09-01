@@ -1,5 +1,6 @@
 package de.fetzerms.irccatx.script;
 
+import de.fetzerms.irccatx.blowfish.Blowfish;
 import de.fetzerms.irccatx.client.IrcClient;
 import de.fetzerms.irccatx.util.ColorMap;
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ public class ScriptRunner implements Runnable {
     private final String args;
     private final String target;
     private final String hostmask;
+    private final boolean crypt;
 
 
     /**
@@ -42,12 +44,13 @@ public class ScriptRunner implements Runnable {
      * @param command   The triggered command, without the trigger itself
      * @param args      Args for the Script
      */
-    public ScriptRunner(String script, String target, String hostmask, String command, String args) {
+    public ScriptRunner(String script, String target, String hostmask, String command, String args, boolean crypt) {
         this.script = script;
         this.target = target;
         this.hostmask = hostmask;
         this.command = command;
         this.args = args;
+        this.crypt = crypt;
     }
 
     public void run() {
@@ -71,7 +74,13 @@ public class ScriptRunner implements Runnable {
 
             // Print the output to irc
             while ((line = br.readLine()) != null) {
-                IrcClient.getInstance().getBot().sendIRC().message(target, ColorMap.colorize(line));
+                String message = ColorMap.colorize(line);
+                if(Blowfish.hasKey(this.target) && this.crypt){
+                    // message = BlowfishManager.getBlow().getBlow(this.target).encrypt(message);
+                    message = Blowfish.encryptMessage(this.target, message);
+                }
+
+                IrcClient.getInstance().getBot().sendIRC().message(target, message);
             }
 
         } catch (IOException e) {

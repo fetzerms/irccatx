@@ -1,5 +1,8 @@
 package de.fetzerms.irccatx.script;
 
+import de.fetzerms.irccatx.client.IrcClient;
+import org.pircbotx.Channel;
+
 import java.util.List;
 
 /**
@@ -11,21 +14,25 @@ import java.util.List;
  */
 public class Script {
 
+    private Boolean needsChannel;
     private String trigger;
     private String command;
     private List<String> authorizedHostmasks;
     private List<String> authorizedChannels;
     private Boolean queryAllowed;
     private Boolean channelAllowed;
+    private Boolean fishOnly;
 
 
-    public Script(String trigger, String command, List<String> authorizedHostmasks, List<String> authorizedChannels, Boolean queryAllowed, Boolean channelAllowed) {
+    public Script(String trigger, String command, List<String> authorizedHostmasks, List<String> authorizedChannels, Boolean queryAllowed, Boolean needsChannel, Boolean channelAllowed, Boolean fishOnly) {
         this.trigger = trigger;
         this.command = command;
         this.authorizedHostmasks = authorizedHostmasks;
         this.authorizedChannels = authorizedChannels;
         this.queryAllowed = queryAllowed;
         this.channelAllowed = channelAllowed;
+        this.fishOnly = fishOnly;
+        this.needsChannel = needsChannel;
     }
 
     public String getTrigger() {
@@ -82,16 +89,17 @@ public class Script {
      * If no hostmasks are defined, execution is permitted.
      *
      * @param hostmask to check against.
+     *
      * @return true if permitted.
      */
-    public boolean isAuthorizedHostmask(String hostmask){
+    public boolean isAuthorizedHostmask(String hostmask) {
 
-        if(authorizedHostmasks.isEmpty()){
+        if (authorizedHostmasks.isEmpty()) {
             return true;
         }
 
-        for(String authorizedHosmask : authorizedHostmasks){
-            if(simpleMatch(hostmask, authorizedHosmask) || hostmask.equals(authorizedHosmask)){
+        for (String authorizedHosmask : authorizedHostmasks) {
+            if (simpleMatch(hostmask, authorizedHosmask) || hostmask.equals(authorizedHosmask)) {
                 return true;
             }
         }
@@ -103,16 +111,26 @@ public class Script {
      * channel. If no channels are defined, execution is permitted.
      *
      * @param channel to check against.
+     *
      * @return true if permitted.
      */
-    public boolean isAuthorizedChannel(String channel){
+    public boolean isAuthorizedChannel(String channel) {
 
-        if(authorizedChannels.isEmpty()){
+        if (authorizedChannels.isEmpty()) {
             return true;
         }
 
-        for(String authorizedChannel : authorizedChannels){
-            if(simpleMatch(channel, authorizedChannel) || authorizedChannel.equals(channel)){
+        for (String authorizedChannel : authorizedChannels) {
+            if (simpleMatch(channel, authorizedChannel) || authorizedChannel.equals(channel)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isInChannel(String nick) {
+        for (Channel channel : IrcClient.getInstance().getBot().getUserChannelDao().getUser(nick).getChannels()) {
+            if (authorizedChannels.contains(channel.getName())) {
                 return true;
             }
         }
@@ -122,12 +140,20 @@ public class Script {
     /**
      * Helper method to convert "*" into java notation
      *
-     * @param text to match
+     * @param text    to match
      * @param pattern to match against
+     *
      * @return true if matching
      */
-    private boolean simpleMatch(String text, String pattern)
-    {
+    private boolean simpleMatch(String text, String pattern) {
         return text.matches(pattern.replace("*", ".*?"));
+    }
+
+    public Boolean isFishOnly() {
+        return fishOnly;
+    }
+
+    public Boolean needsChannel() {
+        return needsChannel;
     }
 }

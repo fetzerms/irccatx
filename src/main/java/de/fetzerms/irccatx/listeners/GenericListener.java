@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Copyright 2015 - Matthias Fetzer <br>
  * <p/>
- *
+ * <p/>
  * Example generic Listener. See pircbotx config for further information.
  *
  * @author Matthias Fetzer - matthias [at] fetzerms.de
@@ -30,6 +30,4 @@ public class GenericListener extends ListenerAdapter {
             event.respond("## Running IRCCatX v" + Config.VERSION);
         }
     }
-
-
 }

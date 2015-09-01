@@ -1,5 +1,6 @@
 package de.fetzerms.irccatx.client;
 
+import de.fetzerms.irccatx.listeners.DH1080Listener;
 import de.fetzerms.irccatx.listeners.GenericListener;
 import de.fetzerms.irccatx.listeners.ScriptListener;
 import de.fetzerms.irccatx.util.Config;
@@ -65,6 +66,7 @@ public class IrcClient {
                 .setRealName("IRCCatX")
                 .addListener(new GenericListener()) // Generic Listener
                 .addListener(new ScriptListener())  // Script Listener
+                .addListener(new DH1080Listener())  // DH1080 Handler
                 .setServerPassword(password).setMessageDelay(messageDelay);
 
         LOG.info("Adding channels.");
@@ -82,7 +84,8 @@ public class IrcClient {
         // Set SSLSocket, if ssl is enabled.
         if (ssl) {
             LOG.info("Using ssl connection.");
-            configBuilder.setSocketFactory(new UtilSSLSocketFactory());
+            configBuilder.setSocketFactory(new UtilSSLSocketFactory().trustAllCertificates());
+            // configBuilder.setSocketFactory(new TrustingSSLSocketFactory());
         }
 
         this.bot = new PircBotX(configBuilder.buildConfiguration());
