@@ -1,9 +1,7 @@
 package de.fetzerms.irccatx.listeners;
 
 import de.fetzerms.irccatx.util.Config;
-import java.util.Map;
 import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.events.ConnectEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,18 +31,4 @@ public class GenericListener extends ListenerAdapter {
         }
     }
 
-    @Override
-    public void onConnect(ConnectEvent event) throws Exception {
-        for (Map.Entry<String, String> channelEntry : Config.getClientChannels().entrySet()) {
-            String channelName = channelEntry.getKey();
-            String channelPassword = channelEntry.getValue();
-
-            LOG.debug("Adding channel {} with password: {}", channelName, channelPassword);
-            if (!channelPassword.isEmpty()) {
-                event.getBot().sendIRC().joinChannel(channelName, channelPassword);
-            } else {
-                event.getBot().sendIRC().joinChannel(channelName);
-            }
-        }
-    }
 }

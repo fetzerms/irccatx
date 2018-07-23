@@ -63,12 +63,28 @@ public class IrcClient {
                 .setServerHostname(host)
                 .setServerPort(port)
                 .setAutoReconnect(true)
+                .setAutoReconnectAttempts(Integer.MAX_VALUE)
+                .setAutoReconnectDelay(1000)
                 .setLogin("irccatx")
                 .setRealName("IRCCatX")
                 .addListener(new GenericListener()) // Generic Listener
                 .addListener(new ScriptListener()) // Script Listener
                 .addListener(new DH1080Listener()) // DH1080 Handler
                 .setServerPassword(password).setMessageDelay(messageDelay);
+
+        for (Map.Entry<String, String> channelEntry : Config.getClientChannels().entrySet()) {
+
+            String channelName = channelEntry.getKey();
+            String channelPassword = channelEntry.getValue();
+
+            LOG.debug("Adding channel {} with password: {}", channelName, channelPassword);
+            if (!channelPassword.isEmpty()) {
+
+                configBuilder.addAutoJoinChannel(channelName, channelPassword);
+            } else {
+                configBuilder.addAutoJoinChannel(channelName);
+            }
+        }
 
         // Set SSLSocket, if ssl is enabled.
         if (ssl) {
