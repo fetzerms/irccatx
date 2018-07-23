@@ -55,10 +55,10 @@ public class IrcClient {
         boolean ssl = Config.getClientSSL();
         long messageDelay = Config.getClientMessageDelay();
 
-
         LOG.debug("Creating configuration");
         // Create configuration
-        @SuppressWarnings("unchecked") Configuration.Builder configBuilder = new Configuration.Builder()
+        @SuppressWarnings("unchecked")
+        Configuration.Builder configBuilder = new Configuration.Builder()
                 .setName(nick)
                 .setServerHostname(host)
                 .setServerPort(port)
@@ -66,21 +66,9 @@ public class IrcClient {
                 .setLogin("irccatx")
                 .setRealName("IRCCatX")
                 .addListener(new GenericListener()) // Generic Listener
-                .addListener(new ScriptListener())  // Script Listener
-                .addListener(new DH1080Listener())  // DH1080 Handler
+                .addListener(new ScriptListener()) // Script Listener
+                .addListener(new DH1080Listener()) // DH1080 Handler
                 .setServerPassword(password).setMessageDelay(messageDelay);
-
-        LOG.info("Adding channels.");
-        // Add all channels
-        for (Map.Entry<String, String> channelEntry : Config.getClientChannels().entrySet()) {
-
-            String channelName = channelEntry.getKey();
-            String channelPassword = channelEntry.getValue();
-
-            LOG.debug("Adding channel {} with password: {}", channelName, channelPassword);
-
-            configBuilder.addAutoJoinChannel(channelName, channelPassword);
-        }
 
         // Set SSLSocket, if ssl is enabled.
         if (ssl) {
