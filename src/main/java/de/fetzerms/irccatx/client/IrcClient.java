@@ -62,6 +62,7 @@ public class IrcClient {
                 .setName(nick)
                 .setServerHostname(host)
                 .setServerPort(port)
+                .setAutoReconnect(true)
                 .setLogin("irccatx")
                 .setRealName("IRCCatX")
                 .addListener(new GenericListener()) // Generic Listener
@@ -85,7 +86,6 @@ public class IrcClient {
         if (ssl) {
             LOG.info("Using ssl connection.");
             configBuilder.setSocketFactory(new UtilSSLSocketFactory().trustAllCertificates());
-            // configBuilder.setSocketFactory(new TrustingSSLSocketFactory());
         }
 
         this.bot = new PircBotX(configBuilder.buildConfiguration());
