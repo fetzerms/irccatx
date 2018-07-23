@@ -1,6 +1,5 @@
 package de.fetzerms.irccatx.util;
 
-
 import de.fetzerms.irccatx.blowfish.Blowfish;
 import de.fetzerms.irccatx.script.Script;
 import org.apache.commons.configuration.ConfigurationException;
@@ -51,6 +50,10 @@ public class Config {
         return config.getInt("ircclient.server.port", 6667);
     }
 
+    public static int getReconnectInterval() {
+        return config.getInt("ircclient.server.reonnectInterval", Integer.MAX_VALUE);
+    }
+
     public static boolean getClientSSL() {
         return config.getBoolean("ircclient.server.ssl", false);
     }
@@ -79,7 +82,7 @@ public class Config {
             }
             channelPasswordMap.put(channelName, channel.getString("password", ""));
             String fishKey = channel.getString("fish.key", "");
-            if(!fishKey.isEmpty()){
+            if (!fishKey.isEmpty()) {
                 Blowfish.setKey(channelName, fishKey);
             }
         }
@@ -119,16 +122,15 @@ public class Config {
         List<HierarchicalConfiguration> scriptConfig = config.configurationsAt("scripts.script");
         for (HierarchicalConfiguration script : scriptConfig) {
 
-
             List<String> hostmasks = new ArrayList<>();
             List<HierarchicalConfiguration> hostmaskConfig = script.configurationsAt("authorization.hostmasks.hostmask");
-            for(HierarchicalConfiguration hostmask : hostmaskConfig){
+            for (HierarchicalConfiguration hostmask : hostmaskConfig) {
                 hostmasks.add(hostmask.getString("."));
             }
 
             List<String> channels = new ArrayList<>();
             List<HierarchicalConfiguration> channelsConfig = script.configurationsAt("authorization.channels.channel");
-            for(HierarchicalConfiguration channel : channelsConfig){
+            for (HierarchicalConfiguration channel : channelsConfig) {
                 channels.add(channel.getString("."));
             }
 

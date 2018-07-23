@@ -54,6 +54,7 @@ public class IrcClient {
         int port = Config.getClientPort();
         boolean ssl = Config.getClientSSL();
         long messageDelay = Config.getClientMessageDelay();
+        int getReconnectInterval = Config.getReconnectInterval();
 
         LOG.debug("Creating configuration");
         // Create configuration
@@ -64,7 +65,7 @@ public class IrcClient {
                 .setServerPort(port)
                 .setAutoReconnect(true)
                 .setAutoReconnectAttempts(Integer.MAX_VALUE)
-                .setAutoReconnectDelay(1000)
+                .setAutoReconnectDelay(getReconnectInterval)
                 .setLogin("irccatx")
                 .setRealName("IRCCatX")
                 .addListener(new GenericListener()) // Generic Listener
