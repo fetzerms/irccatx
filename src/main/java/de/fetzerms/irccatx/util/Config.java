@@ -46,6 +46,10 @@ public class Config {
         return config.getString("ircclient.server.host");
     }
 
+    public static boolean isDh1080Enabled() {
+        return config.getBoolean("ircclient.fish.dh1080", true);
+    }
+
     public static int getClientPort() {
         return config.getInt("ircclient.server.port", 6667);
     }

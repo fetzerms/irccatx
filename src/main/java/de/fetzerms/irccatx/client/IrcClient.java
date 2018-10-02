@@ -70,9 +70,11 @@ public class IrcClient {
                 .setRealName("IRCCatX")
                 .addListener(new GenericListener()) // Generic Listener
                 .addListener(new ScriptListener()) // Script Listener
-                .addListener(new DH1080Listener()) // DH1080 Handler
                 .setServerPassword(password).setMessageDelay(messageDelay);
 
+        if (Config.isDh1080Enabled()) {
+            configBuilder.addListener(new DH1080Listener()) // DH1080 Handler
+        }
         for (Map.Entry<String, String> channelEntry : Config.getClientChannels().entrySet()) {
 
             String channelName = channelEntry.getKey();
