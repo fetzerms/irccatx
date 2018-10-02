@@ -73,7 +73,7 @@ public class IrcClient {
                 .setServerPassword(password).setMessageDelay(messageDelay);
 
         if (Config.isDh1080Enabled()) {
-            configBuilder.addListener(new DH1080Listener()) // DH1080 Handler
+            configBuilder.addListener(new DH1080Listener()); // DH1080 Handler
         }
         for (Map.Entry<String, String> channelEntry : Config.getClientChannels().entrySet()) {
 
